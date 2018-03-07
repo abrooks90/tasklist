@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
     <title>Submission Results</title>
 </head>
-<!-- testing -->   
+
 <body>
   <header>
     <h1>KSU Student Services</h1>
@@ -191,6 +191,7 @@
       } else {
         echo ("<p>No confirmation email was requested...</p>");
       }
+      // Close the connection to mysql database
       mysqli_close($conn);
       // Display a message if any of the fields are left out.
       } else {
@@ -198,7 +199,7 @@
       }
     }
 
-    // Close the connection to mysql database
+
 
   ?>
   </div>
