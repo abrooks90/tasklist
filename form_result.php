@@ -5,7 +5,7 @@
     <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
     <title>Submission Results</title>
 </head>
-
+<!-- testing -->   
 <body>
   <header>
     <h1>KSU Student Services</h1>
