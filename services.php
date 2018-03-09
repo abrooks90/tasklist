@@ -1,9 +1,39 @@
-<!DOCTYPE html>
-<html>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="UTF-8">
 <title>KSU Student Services | Search Services</title>
 <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
+
+<script type="text/javascript">
+    var xmlReq;
+    function processResponse(){
+       if(xmlReq.readyState == 4){
+           var place = document.getElementById("placeholder");
+           place.innerHTML = xmlReq.responseText
+      }
+    }
+   function loadResponse(){
+      // create an instance of XMLHttpRequest
+      xmlReq = new XMLHttpRequest();
+      xmlReq.onreadystatechange = processResponse;
+      //call server_side.php
+      xmlReq.open("POST", "search_result.php", true);
+      //read value from the form
+      // encodeURI is used to escaped reserved characters
+      parameter = "keyword=" + encodeURI(document.forms["form1"].keyword.value);
+      //send headers
+      xmlReq.setRequestHeader("Content-type",
+                  "application/x-www-form-urlencoded");
+      xmlReq.setRequestHeader("Content-length", parameter.length);
+      xmlReq.setRequestHeader("Connection", "close");
+      //send request with parameters
+      xmlReq.send(parameter);
+      return false;
+   }
+</script>
 </head >
 
 <body>
@@ -20,7 +50,7 @@
   </nav>
 
   <h3>Search Services</h3>
-  <form form id="search" method="post" action="search_result.php">
+  <form form id="search" name="form1" method="post" action="" onsubmit="return loadResponse();">
     <?php include "menu.php"; ?>
     <?php
       // specify database connection credentials
@@ -76,9 +106,11 @@
     </fieldset>
 
 	  <fieldset id="submission">
-	     <input type="submit" value="Search" />
+	     <input type="submit" value="Search" onclick="loadResponse()">
 	  </fieldset>
   </form>
+
+  <div id="placeholder"></div>
   </div>
 </body>
 </html>
