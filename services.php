@@ -10,16 +10,9 @@
 
 
 <script type="text/javascript">
-    var xmlReq;
-    function processResponse(){
-       if(xmlReq.readyState == 4){
-           var place = document.getElementById("placeholder");
-           place.innerHTML = xmlReq.responseText
-      }
-    }
-   function loadResponse(){
-
-    select = document.getElementById('service_select'); // or in jQuery use: select = this;
+    function loadResponse(){
+    // Dump the select value to a variable for form validation.
+    select = document.getElementById('service_select');
     if (!select.value) {
     //If select value isn't valid, return false.
     return false;
@@ -30,15 +23,20 @@
        $("form#search").submit(function() {
 
         var days = new Array();
-        $("input:checked").each(function() {
+        $(".days:input:checked").each(function() {
            days.push($(this).val());
+        });
+
+        var times = new Array();
+        $(".availability:input:checked").each(function() {
+           times.push($(this).val());
         });
 
         $.ajax({
             type: "POST",
             url: "search_result.php",
             dataType: 'html',
-            data: 'service_select='+$("#service_select").val()  + '&days=' + days,
+            data: 'service_select='+$("#service_select").val()  + '&days=' + days + '&time=' + times,
             success: function(data){
                 $('#placeholder ').html(data)
             }
@@ -46,27 +44,7 @@
         return false;
         });
       });
-
-      // create an instance of XMLHttpRequest
-      xmlReq = new XMLHttpRequest();
-      xmlReq.onreadystatechange = processResponse;
-      //call server_side.php
-      xmlReq.open("POST", "search_result.php", true);
-      //read value from the form
-      // encodeURI is used to escaped reserved characters
-      parameter = "service_select=" + encodeURI(document.forms["form1"].service_select.value) +  encodeURI("&days : ['Tue', 'Wed']");
-      //send headers
-      xmlReq.setRequestHeader("Content-type",
-                  "application/x-www-form-urlencoded");
-      xmlReq.setRequestHeader("Content-length", parameter.length);
-      xmlReq.setRequestHeader("Connection", "close");
-      //send request with parameters
-      xmlReq.send(parameter);
-      return false;
-
    }
-
-
 </script>
 </head >
 <body>

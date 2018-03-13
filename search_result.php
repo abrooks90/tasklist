@@ -1,13 +1,10 @@
   <?php
-
   // Checks to see if the submit button was clicked.
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-
-
         // Validate that the search included a service selection.
         if($_POST['service_select'] != ""){
           $days = explode(',', $_POST['days']);
+          $times = explode(',', $_POST['time']);
           $service = $_POST['service_select'];
 
           // specify database connection credentials
@@ -59,7 +56,7 @@
                 INNER JOIN services_offered ON profile.profileID=services_offered.profileID
                 INNER JOIN services ON services.svcID=services_offered.svcID
                 WHERE (service_description LIKE '%$service%') AND (avail_hours LIKE '%";
-              $times = implode("%' OR avail_hours LIKE '%", $_POST['time']);
+              $times = implode("%' OR avail_hours LIKE '%", $times);
               $sql = $sql . $times . "%') AND (avail_days LIKE '%";
               $days = implode("%' OR avail_days LIKE '%", $days);
               $sql = $sql . $days . "%');";
@@ -74,7 +71,7 @@
                 INNER JOIN services_offered ON profile.profileID=services_offered.profileID
                 INNER JOIN services ON services.svcID=services_offered.svcID
                 WHERE (service_description LIKE '%$service%') AND (avail_hours LIKE '%";
-              $times = implode("%' OR avail_hours LIKE '%", $_POST['time']);
+              $times = implode("%' OR avail_hours LIKE '%", $times);
               $sql = $sql . $times . "%');";
 
               // Calls out function to query the database. Connection information and the SQL query are passed as variables.
