@@ -1,80 +1,15 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
 <meta charset="UTF-8">
 <title>KSU Student Services | Search Services</title>
 <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
-<script src="http://code.jquery.com/jquery.min.js"></script>
+</head>
 
-
-<script type="text/javascript">
-    var xmlReq;
-    function processResponse(){
-       if(xmlReq.readyState == 4){
-           var place = document.getElementById("placeholder");
-           place.innerHTML = xmlReq.responseText
-      }
-    }
-   function loadResponse(){
-
-    select = document.getElementById('service_select'); // or in jQuery use: select = this;
-    if (!select.value) {
-    //If select value isn't valid, return false.
-    return false;
-    }
-
-     $(document).ready(function() {
-
-       $("form#search").submit(function() {
-
-        var days = new Array();
-        $("input:checked").each(function() {
-           days.push($(this).val());
-        });
-
-        $.ajax({
-            type: "POST",
-            url: "search_result.php",
-            dataType: 'html',
-            data: 'service_select='+$("#service_select").val()  + '&days=' + days,
-            success: function(data){
-                $('#placeholder ').html(data)
-            }
-        });
-        return false;
-        });
-      });
-
-      // create an instance of XMLHttpRequest
-      xmlReq = new XMLHttpRequest();
-      xmlReq.onreadystatechange = processResponse;
-      //call server_side.php
-      xmlReq.open("POST", "search_result.php", true);
-      //read value from the form
-      // encodeURI is used to escaped reserved characters
-      parameter = "service_select=" + encodeURI(document.forms["form1"].service_select.value) +  encodeURI("&days : ['Tue', 'Wed']");
-      //send headers
-      xmlReq.setRequestHeader("Content-type",
-                  "application/x-www-form-urlencoded");
-      xmlReq.setRequestHeader("Content-length", parameter.length);
-      xmlReq.setRequestHeader("Connection", "close");
-      //send request with parameters
-      xmlReq.send(parameter);
-      return false;
-
-   }
-
-
-</script>
-</head >
 <body>
   <header>
 	<h1>KSU Student Services</h1>
   </header>
-
-
 
   <div id="wrapper">
   <nav id="navigation">
@@ -85,7 +20,7 @@
   </nav>
 
   <h3>Search Services</h3>
-  <form form id="search" name="form1" method="post" action="">
+  <form form id="search" method="post" action="search_result.php">
     <?php include "menu.php"; ?>
     <?php
       // specify database connection credentials
@@ -107,14 +42,13 @@
       if (!$result) {
          die("Invalid query: " . mysqli_error($conn));
       } else {
-        echo "<fieldset><label>Select by Service:<select id='service_select' name='service_select' required><option value=''>Select Service</option>";
+        echo "<fieldset><label>Select by Service:<select name='service_select' required><option value=''>Select Service</option>";
         while($row = mysqli_fetch_array($result)){
           echo "<option>{$row['service_description']}</option>";
         }
         echo "</select><label></fieldset>";
       }
     ?>
-
 
     <!-- Filter by available days of the week -->
     <fieldset id="days"><legend>Select Available Days:</legend>
@@ -142,25 +76,9 @@
     </fieldset>
 
 	  <fieldset id="submission">
-	     <input type="submit" value="Search" onclick="loadResponse()"></script>
+	     <input type="submit" value="Search" />
 	  </fieldset>
-
-    <div id="placeholder"></div>
-<!--
-    <script>
-    var x = document.createElement("FIELDSET");
-    x.setAttribute("id","submission");
-    var btn = document.createElement("BUTTON");
-    btn.setAttribute("type", "submit");
-    var t = document.createTextNode("Search");
-    btn.appendChild(t);
-    x.appendChild(btn);
-    document.getElementById("placeholder").appendChild(x);
-    document.getElementById("submission").onclick = loadResponse;
-    </script>
--->
   </form>
-    </div>
   </div>
 </body>
 </html>

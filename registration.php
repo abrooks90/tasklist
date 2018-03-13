@@ -32,6 +32,7 @@ function formValidation(){
 </head>
 
 <body>
+
   <?php
     // specify database connection credentials
     $conn = new mysqli("localhost", "student_user","my*password", "abrooks");
