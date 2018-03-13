@@ -1,34 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-  
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Search Results</title>
-    <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
-</head>
-
-<body>
-  <header>
-    <h1>KSU Student Services</h1>
-  </header>
-
-  <div id="wrapper">
-  <nav id="navigation">
-    <ul>
-    <li><a href="registration.php">Registration</a></li>
-    <li><a href="services.php">Search Services</a></li>
-    </ul>
-  </nav>
-
-  <h3>Search Results</h3>
-  <!-- Using a div tag to format the output to look like our other forms, registration and services. -->
-  <div id="results">
-  <?php include "menu.php"; ?>
   <?php
+
   // Checks to see if the submit button was clicked.
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+
+
         // Validate that the search included a service selection.
         if($_POST['service_select'] != ""){
+          $days = explode(',', $_POST['days']);
           $service = $_POST['service_select'];
 
           // specify database connection credentials
@@ -82,7 +61,7 @@
                 WHERE (service_description LIKE '%$service%') AND (avail_hours LIKE '%";
               $times = implode("%' OR avail_hours LIKE '%", $_POST['time']);
               $sql = $sql . $times . "%') AND (avail_days LIKE '%";
-              $days = implode("%' OR avail_days LIKE '%", $_POST['days']);
+              $days = implode("%' OR avail_days LIKE '%", $days);
               $sql = $sql . $days . "%');";
 
               // Calls out function to query the database. Connection information and the SQL query are passed as variables.
@@ -108,7 +87,7 @@
                 INNER JOIN services_offered ON profile.profileID=services_offered.profileID
                 INNER JOIN services ON services.svcID=services_offered.svcID
                 WHERE (service_description LIKE '%$service%') AND (avail_days LIKE '%";
-              $days = implode("%' OR avail_hours LIKE '%", $_POST['days']);
+              $days = implode("%' OR avail_days LIKE '%", $days);
               $sql = $sql . $days . "%');";
 
               // Calls out function to query the database. Connection information and the SQL query are passed as variables.
@@ -129,7 +108,3 @@
         }
     }
   ?>
-  </div>
-  </div>
-  </body>
-</html>
