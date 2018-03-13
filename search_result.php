@@ -107,7 +107,7 @@
                 INNER JOIN services_offered ON profile.profileID=services_offered.profileID
                 INNER JOIN services ON services.svcID=services_offered.svcID
                 WHERE (service_description LIKE '%$service%') AND (avail_days LIKE '%";
-              $days = implode("%' OR avail_hours LIKE '%", $_POST['days']);
+              $days = implode("%' OR avail_days LIKE '%", $_POST['days']);
               $sql = $sql . $days . "%');";
 
               // Calls out function to query the database. Connection information and the SQL query are passed as variables.
