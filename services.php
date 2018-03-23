@@ -7,8 +7,6 @@
 <title>KSU Student Services | Search Services</title>
 <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
 <script src="http://code.jquery.com/jquery.min.js"></script>
-
-
 <script type="text/javascript">
     function loadResponse(){
     // Dump the select value to a variable for form validation.
@@ -55,12 +53,7 @@
 
 
   <div id="wrapper">
-  <nav id="navigation">
-    <ul>
-	  <li><a href="registration.php">Registration</a></li>
-	  <li><a href="services.php">Search Services</a></li>
-	</ul>
-  </nav>
+  <?php include "side_nav.php"; ?>
 
   <h3>Search Services</h3>
   <form form id="search" name="form1" method="post" action="">
