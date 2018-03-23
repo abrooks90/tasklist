@@ -26,7 +26,7 @@
 				}
 				if ($query = mysqli_prepare($conn,"SELECT fname, lname, email, netID FROM profile
 													INNER JOIN services_offered on profile.profileID = services_offered.profileID
-													INNER JOIN services on services_offered.svcID = services.svcID 
+													INNER JOIN services on services_offered.svcID = services.svcID
 													WHERE (service_description like ? and netID NOT LIKE ?)")) {
 					mysqli_stmt_bind_param ($query, "ss", $service,$_SESSION['user']);
 					mysqli_stmt_execute($query);

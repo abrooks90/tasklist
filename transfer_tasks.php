@@ -1,4 +1,4 @@
-<?php 
+<?php
 	session_start();
 	$_SESSION['user'] = 'jane234';
 	$_SESSION['password'] = 'test*password';
@@ -30,7 +30,7 @@
 				xmlReq.send(parameter);
 				return false;
 			}
-			
+
 			function checkrecipient(){
 				var recipients = document.forms['recipients'].recipient.value;
 				if(!recipients){
@@ -48,29 +48,33 @@
 			<h1>KSU Student Services</h1>
 		</header>
 		<div id="wrapper">
-			<nav id="navigation">
-				<ul>
-					<li><a href="registration.php">Registration</a></li>
-					<li><a href="services.php">Search Services</a></li>
-				</ul>
-			</nav>
-			<h3>Select a task to transfer:</h3><br/>
-			<form class="tasks" id="tasks">
+			<?php include "side_nav.php"; ?>
+			<h3>Transfer a Task:</h3>
+			<form class="tasks" action="taskTransfer.php" id="tasks" method="post" onsubmit="return checkrecipient(this)">
 				<?php include "menu.php";
 				$conn = new mysqli("localhost", "student_user","my*password", "abrooks");
 				if (mysqli_connect_errno()){
 					die('Cannot connect to database: ' . mysqli_connect_error($conn));
 				}
 				else{
-					$query = mysqli_prepare($conn,"SELECT task_description,task_due_date,service_description, taskID FROM tasks INNER JOIN services ON tasks.svcID = services.svcID WHERE assigned_user = ?")
-						or die("Error: " . mysqli_error($conn));
+					$query = mysqli_prepare($conn,"SELECT profileID FROM profile where netID = ?");
 					mysqli_stmt_bind_param($query,"s",$_SESSION['user']);
+					mysqli_stmt_execute($query);
+					mysqli_stmt_bind_result($query,$profID);
+					$result = mysqli_stmt_get_result($query);
+					while($row=mysqli_fetch_array($result)){
+						$profileID = $row['profileID'];
+					}
+					mysqli_stmt_close($query);
+					$query = mysqli_prepare($conn,"SELECT task_description,task_due_date,service_description, taskID FROM tasks INNER JOIN services ON tasks.svcID = services.svcID INNER JOIN profile on tasks.assigned_user = profile.profileID WHERE assigned_user = ?")
+						or die("Error: " . mysqli_error($conn));
+					mysqli_stmt_bind_param($query,"i",$profileID);
 					mysqli_stmt_execute($query)
 						or die("Error: ". mysqli_error($conn));
 					$result = mysqli_stmt_get_result($query);
 					mysqli_close($conn);
 					mysqli_stmt_close($query);
-				
+
 					if(!$result){
 						die("Error: " . mysqli_error($conn));
 					}
@@ -84,11 +88,9 @@
 					}
 				}
 				?>
-			</form><br/>
-		</div>
-		<h3>Select a recipient:</h3>
-			<form class="tasks" action="taskTransfer.php" id="recipients" method="post" onsubmit="return checkrecipient()">
+				<div id="recipients"></div>
 			</form>
-		<br/>
+		</div>
+
 	</body>
 </html>
