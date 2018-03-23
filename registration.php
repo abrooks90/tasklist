@@ -32,7 +32,6 @@ function formValidation(){
 </head>
 
 <body>
-
   <?php
     // specify database connection credentials
     $conn = new mysqli("localhost", "student_user","my*password", "abrooks");
@@ -55,12 +54,7 @@ function formValidation(){
 
   <!-- Using a div to format the form -->
   <div id="wrapper">
-  <nav id="navigation">
-    <ul>
-    <li><a href="registration.php">Registration</a></li>
-    <li><a href="services.php">Search Services</a></li>
-    </ul>
-  </nav>
+  <?php include "side_nav.php"; ?>
 
 
   <h3>Student Services Registration </h3>

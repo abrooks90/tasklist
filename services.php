@@ -1,26 +1,62 @@
-<!DOCTYPE html>
-<html>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="UTF-8">
 <title>KSU Student Services | Search Services</title>
 <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
-</head>
+<script src="http://code.jquery.com/jquery.min.js"></script>
+<script type="text/javascript">
+    function loadResponse(){
+    // Dump the select value to a variable for form validation.
+    select = document.getElementById('service_select');
+    if (!select.value) {
+    //If select value isn't valid, return false.
+    return false;
+    }
 
+     $(document).ready(function() {
+
+       $("form#search").submit(function() {
+
+        var days = new Array();
+        $(".days:input:checked").each(function() {
+           days.push($(this).val());
+        });
+
+        var times = new Array();
+        $(".availability:input:checked").each(function() {
+           times.push($(this).val());
+        });
+
+        $.ajax({
+            type: "POST",
+            url: "search_result.php",
+            dataType: 'html',
+            data: 'service_select='+$("#service_select").val()  + '&days=' + days + '&time=' + times,
+            success: function(data){
+                $('#placeholder ').html(data)
+            }
+        });
+        return false;
+        });
+      });
+   }
+</script>
+</head >
 <body>
   <header>
 	<h1>KSU Student Services</h1>
   </header>
 
+
+
   <div id="wrapper">
-  <nav id="navigation">
-    <ul>
-	  <li><a href="registration.php">Registration</a></li>
-	  <li><a href="services.php">Search Services</a></li>
-	</ul>
-  </nav>
+  <?php include "side_nav.php"; ?>
 
   <h3>Search Services</h3>
-  <form form id="search" method="post" action="search_result.php">
+  <form form id="search" name="form1" method="post" action="">
     <?php include "menu.php"; ?>
     <?php
       // specify database connection credentials
@@ -42,13 +78,14 @@
       if (!$result) {
          die("Invalid query: " . mysqli_error($conn));
       } else {
-        echo "<fieldset><label>Select by Service:<select name='service_select' required><option value=''>Select Service</option>";
+        echo "<fieldset><label>Select by Service:<select id='service_select' name='service_select' required><option value=''>Select Service</option>";
         while($row = mysqli_fetch_array($result)){
           echo "<option>{$row['service_description']}</option>";
         }
         echo "</select><label></fieldset>";
       }
     ?>
+
 
     <!-- Filter by available days of the week -->
     <fieldset id="days"><legend>Select Available Days:</legend>
@@ -76,9 +113,25 @@
     </fieldset>
 
 	  <fieldset id="submission">
-	     <input type="submit" value="Search" />
+	     <input type="submit" value="Search" onclick="loadResponse()"></script>
 	  </fieldset>
+
+    <div id="placeholder"></div>
+<!--
+    <script>
+    var x = document.createElement("FIELDSET");
+    x.setAttribute("id","submission");
+    var btn = document.createElement("BUTTON");
+    btn.setAttribute("type", "submit");
+    var t = document.createTextNode("Search");
+    btn.appendChild(t);
+    x.appendChild(btn);
+    document.getElementById("placeholder").appendChild(x);
+    document.getElementById("submission").onclick = loadResponse;
+    </script>
+-->
   </form>
+    </div>
   </div>
 </body>
 </html>

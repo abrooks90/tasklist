@@ -5,20 +5,14 @@
     <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
     <title>Submission Results</title>
 </head>
-
+<!-- testing -->
 <body>
   <header>
     <h1>KSU Student Services</h1>
   </header>
 
   <div id="wrapper">
-  <nav id="navigation">
-    <ul>
-    <li><a href="registration.php">Registration</a></li>
-    <li><a href="services.php">Search Services</a></li>
-    </ul>
-  </nav>
-
+  <?php include "side_nav.php"; ?>
 
   <h3>Submission Results</h3>
   <div id="results">
