@@ -67,6 +67,7 @@ if (!isset($_SESSION['authenticated'])) {
 			<form class="tasks" action="" id="tasks" method="post" onsubmit="return checkrecipient(this)">
 				<?php include "menu.php"; ?>
 				<?php
+        // Check to see if there's a valid session. If not, display link to login page.
 				if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1) {
 				    echo "ERROR: To use this web site, you need to have valid credentials.  <a href='login.php'>Log in here.</a>";
 				}
@@ -112,6 +113,7 @@ if (!isset($_SESSION['authenticated'])) {
 				<div id="recipients"></div>
 			</form>
 		</div>
+<!-- Closing tag for our previous statement that checks for a valid session -->
 <?php } ?>
 	</body>
 </html>

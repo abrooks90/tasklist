@@ -7,7 +7,7 @@ if (!isset($_SESSION['authenticated'])) {
     $_SESSION['authenticated'] = 0;
 }
 
-
+  // Side nav has login button if there's no valid sessions
 if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1) {
 echo "<nav id='navigation'>
   <ul>
@@ -18,6 +18,8 @@ echo "<nav id='navigation'>
   </ul>
 </nav>";
 }else{
+
+  // Displays a logout button if the user has a valid session
   echo "<nav id='navigation'>
     <ul>
     <li><a href='home.php'>Home</a></li>
