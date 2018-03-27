@@ -1,7 +1,11 @@
 <?php
-	session_start();
-	$_SESSION['user'] = 'jane234';
-	$_SESSION['password'] = 'test*password';
+@session_start(); //start session
+
+//see http://phpsec.org/projects/guide/4.html
+if (!isset($_SESSION['authenticated'])) {
+    session_regenerate_id();
+    $_SESSION['authenticated'] = 0;
+}
 ?>
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
@@ -11,6 +15,7 @@
 	<head>
 		<title>Transfer task</title>
 		<link rel="stylesheet" type="text/css" href="registration_styles.css"/>
+
 		<script type="text/javascript">
 			var xmlReq;
 			function processResponse(){
@@ -38,6 +43,14 @@
 					return false;
 				}
 				else{
+					var id = document.forms['tasks'].taskID.value;
+					xmlReq = new XMLHttpRequest();
+					xmlReq.onreadystatechange = processResponse;
+					xmlReq.open("POST", "tasks.php", true);
+					parameter = "taskID=" + encodeURI(document.forms['tasks'].taskID.value);
+					xmlReq.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+					xmlReq.send(parameter);
+					return false;
 					return true;
 				}
 			}
@@ -50,8 +63,16 @@
 		<div id="wrapper">
 			<?php include "side_nav.php"; ?>
 			<h3>Transfer a Task:</h3>
-			<form class="tasks" action="taskTransfer.php" id="tasks" method="post" onsubmit="return checkrecipient(this)">
-				<?php include "menu.php";
+
+			<form class="tasks" action="" id="tasks" method="post" onsubmit="return checkrecipient(this)">
+				<?php include "menu.php"; ?>
+				<?php
+				if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1) {
+				    echo "ERROR: To use this web site, you need to have valid credentials.  <a href='login.php'>Log in here.</a>";
+				}
+				else {
+				?>
+				<?php
 				$conn = new mysqli("localhost", "student_user","my*password", "abrooks");
 				if (mysqli_connect_errno()){
 					die('Cannot connect to database: ' . mysqli_connect_error($conn));
@@ -91,6 +112,6 @@
 				<div id="recipients"></div>
 			</form>
 		</div>
-
+<?php } ?>
 	</body>
 </html>
