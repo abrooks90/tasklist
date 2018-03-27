@@ -7,6 +7,7 @@ if (!isset($_SESSION['authenticated'])) {
     $_SESSION['authenticated'] = 0;
 }
 
+
 if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1) {
 echo "<nav id='navigation'>
   <ul>
