@@ -1,3 +1,5 @@
+<!-- This file returns the results from the submission of registration.php -->
+
 <!DOCTYPE html>
 <html>
 <head>

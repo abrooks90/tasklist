@@ -1,4 +1,6 @@
-  <?php
+<!-- This file returns search results from the submission of services.php -->
+
+<?php
   // Checks to see if the submit button was clicked.
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Validate that the search included a service selection.
@@ -104,4 +106,4 @@
           echo "You didn't search by service. Please click the back button and select a service.";
         }
     }
-  ?>
+?>
