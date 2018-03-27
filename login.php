@@ -15,10 +15,10 @@
 
   <h3>Student Services Login</h3>
 
-<form>
+<form method="post" action="authentication.php">
   <?php include "menu.php"; ?>
-<label>User ID: <input type="text" name"userID" required></label><br>
-<label>Password: <input type="text" name"password" required></label><br>
+<label>User ID: <input type="text" name="userID" required></label><br>
+<label>Password: <input type="text" name="password" required></label><br>
 <input type="submit" value="Submit">
 </form>
 
