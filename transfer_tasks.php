@@ -43,6 +43,7 @@ if (!isset($_SESSION['authenticated'])) {
 					return false;
 				}
 				else{
+          // If a recipient for the selected tag is chosen, send the call to tasks.php to transfer the task.
 					var id = document.forms['tasks'].taskID.value;
 					xmlReq = new XMLHttpRequest();
 					xmlReq.onreadystatechange = processResponse;
