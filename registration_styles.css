@@ -39,7 +39,6 @@ h3 {
 
 fieldset {
   border: none;
-  padding-bottom: 20px;
 }
 
 nav {
@@ -55,7 +54,12 @@ nav {
 }
 
 #searchTable table, th, td {
-    border: 1px solid black;
+  border: 1px solid black;
+}
+
+#login label{
+  display: inline-block;
+  min-width: 85px;
 }
 
 #navigation {
@@ -89,15 +93,9 @@ nav {
 	min-width: 120px;
 }
 
-#contact{
-  width: 260px;
- }
-
  #contact label{
-  display: block;
- }
-#contact input{
-	float: right;
+   display: inline-block;
+   min-width: 96px;
  }
 
 #submission{

@@ -64,12 +64,16 @@ function formValidation(){
     <fieldset id="contact">
     <!--use the "pattern" and "title" fields to notify the end user of invalid input-->
     <!--NetID consists of alphanumerical input. Uppercase and lowercase and 0-9. Input should at least be 3 characters.-->
-    <label>KSU NetID:<input type="text" pattern="[A-Za-z0-9]{3,}" title="Please enter your alphanumerical NetID." name="netId" required placeholder="Enter NetID"></label><br>
+    <label for="netId">KSU NetID:</label><input type="text" pattern="[A-Za-z0-9]{3,}" title="Please enter your alphanumerical NetID." name="netId" id="netId" required placeholder="Enter NetID">
+    <label for="pass">Password:</label><input type="password" title="Please create your password." name="pass" id="pass" required placeholder="Enter Password">
+    <br>
     <!--First and last name are uppercase/lowercase with at least 3 letters.-->
-    <label>First Name:<input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="firstName" required placeholder="Enter First Name"></label><br>
-    <label>Last Name:<input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="lastName" required placeholder="Enter Last Name"></label><br>
+    <label for="firstName">First Name:</label><input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="firstName" id="firstName" required placeholder="Enter First Name">
+    <label for="passConfirm">Retype Pass:</label><input type="password" title="Please confirm your password." name="passConfirm" id="passConfirm" required placeholder="Confirm Password">
+    <br>
+    <label for="lastName">Last Name:</label><input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="lastName" id="lastName" required placeholder="Enter Last Name"><br>
     <!--HTML5 has a built in pattern match for email-->
-    <label>Email:<input type="email" name="email" required placeholder="Enter a valid Email"></label><br>
+    <label for="email">Email:</label><input type="email" name="email" id="email" required placeholder="Enter a valid Email"><br>
     </fieldset>
 
 
