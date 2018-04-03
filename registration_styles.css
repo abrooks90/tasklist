@@ -49,6 +49,10 @@ nav {
   border-radius: 10px;
 }
 
+input {
+  margin: 2px;
+}
+
 #availability {
   width: 525px;
 }

@@ -5,7 +5,9 @@
 <title>KSU Student Services | Registration</title>
 <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
 <script src="http://code.jquery.com/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+
 function formValidation(){
   // Check the number of checkboxes that are checked and assign them to variable n.
   var n = $( ".service:checkbox:checked" ).length;
@@ -27,7 +29,16 @@ function formValidation(){
     alert("Please select your availability!")
     return false;
   }
+
+  if($("#pass").val() == "" || $("#passConfirm").val() == ""){
+    return false;
+  }else if ($("#pass").val() !== $("#passConfirm").val()) {
+    return false;
+  }
 }
+
+
+
 </script>
 </head>
 
@@ -65,11 +76,11 @@ function formValidation(){
     <!--use the "pattern" and "title" fields to notify the end user of invalid input-->
     <!--NetID consists of alphanumerical input. Uppercase and lowercase and 0-9. Input should at least be 3 characters.-->
     <label for="netId">KSU NetID:</label><input type="text" pattern="[A-Za-z0-9]{3,}" title="Please enter your alphanumerical NetID." name="netId" id="netId" required placeholder="Enter NetID">
-    <label for="pass">Password:</label><input type="password" title="Please create your password." name="pass" id="pass" required placeholder="Enter Password">
+    <label for="pass">Password:</label><input type="password" title="Password should be 8 characters long and contain an uppercase, lowercase, and a number" pattern="^((?=^.{8,}$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$" name="pass" id="pass" required placeholder="Enter Password">
     <br>
     <!--First and last name are uppercase/lowercase with at least 3 letters.-->
     <label for="firstName">First Name:</label><input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="firstName" id="firstName" required placeholder="Enter First Name">
-    <label for="passConfirm">Retype Pass:</label><input type="password" title="Please confirm your password." name="passConfirm" id="passConfirm" required placeholder="Confirm Password">
+    <label for="passConfirm">Retype Pass:</label><input type="password" pattern="^((?=^.{8,}$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$" title="Password should be 8 characters long and contain an uppercase, lowercase, and a number" name="passConfirm" id="passConfirm" required placeholder="Confirm Password">
     <br>
     <label for="lastName">Last Name:</label><input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="lastName" id="lastName" required placeholder="Enter Last Name"><br>
     <!--HTML5 has a built in pattern match for email-->
