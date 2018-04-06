@@ -106,4 +106,3 @@
           echo "You didn't search by service. Please click the back button and select a service.";
         }
     }
-?>
