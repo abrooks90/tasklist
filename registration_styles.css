@@ -18,7 +18,7 @@ header {
 
 form {
   width: 80%;
-  min-height: 660px;
+  height: 660px;
   margin-left:auto;
   margin-top: 10px;
   background-color: #EAE8EB;
@@ -39,6 +39,7 @@ h3 {
 
 fieldset {
   border: none;
+  padding-bottom: 20px;
 }
 
 nav {
@@ -49,21 +50,12 @@ nav {
   border-radius: 10px;
 }
 
-input {
-  margin: 2px;
-}
-
 #availability {
   width: 525px;
 }
 
 #searchTable table, th, td {
-  border: 1px solid black;
-}
-
-#login label{
-  display: inline-block;
-  min-width: 85px;
+    border: 1px solid black;
 }
 
 #navigation {
@@ -97,9 +89,16 @@ input {
 	min-width: 120px;
 }
 
- #contact label{
-   display: inline-block;
-   min-width: 96px;
+#contact{
+  width: 260px;
+ }
+
+#contact label{
+  display: block;
+ }
+ 
+#contact input{
+	float: right;
  }
 
 #submission{
@@ -108,7 +107,9 @@ input {
     text-align: center;
 }
 
-#service label{ display: inline-block; width: 160px; }
+#service label{ 
+	display: inline-block; width: 160px; 
+}
 
 /*Formats a div tag on the search_result.php and form_result.php pages. Makes these pages look like the registration and search page.*/
 #results {
@@ -122,4 +123,19 @@ input {
 
 #wrapper{
   margin-top: 15px;
+}
+
+.trow{
+	display: table-row;
+	margin:auto;
+	text-align: center;
+}
+
+.tcell{
+	display: table-cell;
+	padding-left: 1.5em;
+}
+
+.tasks{
+	text-align:center;
 }
