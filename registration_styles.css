@@ -89,26 +89,23 @@ nav {
 	min-width: 120px;
 }
 
-#contact{
-  width: 260px;
- }
-
 #contact label{
-  display: block;
- }
- 
+  display: inline-block;
+  min-width: 96px;
+}
+
 #contact input{
-	float: right;
+  margin: 2px;
  }
 
 #submission{
-    display: block;
-    margin: 1.0em auto;
-    text-align: center;
+  display: block;
+  margin: 1.0em auto;
+  text-align: center;
 }
 
-#service label{ 
-	display: inline-block; width: 160px; 
+#service label{
+	display: inline-block; width: 160px;
 }
 
 /*Formats a div tag on the search_result.php and form_result.php pages. Makes these pages look like the registration and search page.*/
