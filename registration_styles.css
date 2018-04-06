@@ -98,6 +98,11 @@ nav {
   margin: 2px;
  }
 
+#login label{
+  display: inline-block;
+  min-width: 85px;
+}
+
 #submission{
   display: block;
   margin: 1.0em auto;
