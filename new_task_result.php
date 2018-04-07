@@ -15,20 +15,14 @@
 	    <h1>KSU Student Services</h1>
     </header>
     <div id="wrapper">
-    <nav id="navigation">
-        <ul>
-            <li><a href="registration.php">Registration</a></li>
-            <li><a href="services.php">Search Services</a></li>
-            <li><a href="new_task.php">New Task</a></li>
-        </ul>
-    </nav>
+    <?include "side_nav.php";?>
     <h3>New Task Result</h3>
     <div id="results">
     <?php
         include 'menu.php';
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!empty($_POST['netID'] || !empty($_POST['taskDescription']))) {
-                $netID = $_POST['netID'];
+                $netID = $_SESSION["user"];
                 $taskDescription = $_POST['taskDescription'];
                 $serviceSelected = $_POST['service_select'];
                 $assignedUser = $_POST['assign_user'];
@@ -38,7 +32,7 @@
         } else {
             # code...
         }
-        
+
     ?>
     </div>
     </div>
