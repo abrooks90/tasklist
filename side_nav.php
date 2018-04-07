@@ -25,7 +25,8 @@ echo "<nav id='navigation'>
     <li><a href='home.php'>Home</a></li>
     <li><a href='registration.php'>Registration</a></li>
     <li><a href='services.php'>Search Services</a></li>
-    <li><a href='transfer_tasks.php'>Task Transfer</a></li>
+    <li><a href='new_task.php'>New Task</a></li>
+    <li><a href='transfer_tasks.php'>Transfer Task</a></li>
     <li><a href='logout.php'>Logout</a></li>
     </ul>
   </nav>";

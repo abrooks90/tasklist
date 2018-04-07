@@ -34,13 +34,7 @@
 	    <h1>KSU Student Services</h1>
     </header>
     <div id="wrapper">
-    <nav id="navigation">
-        <ul>
-            <li><a href="registration.php">Registration</a></li>
-            <li><a href="services.php">Search Services</a></li>
-            <li><a href="new_task.php">New Task</a></li>
-        </ul>
-    </nav>
+    <?php include "side_nav.php"; ?>
     <h3>Add New Task</h3>
     <form id="newTask" action="new_task_result.php" method="POST" onsubmit="return validate();">
         <?php include 'menu.php'; ?>

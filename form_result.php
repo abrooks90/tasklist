@@ -53,7 +53,6 @@
       $confirmation = false;
     } else {
       $password = $_POST["pass"];
-      echo "Your password has been set.";
     }
 
     if (empty($_POST["firstName"])) {
