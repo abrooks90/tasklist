@@ -21,8 +21,8 @@
   <?php include "menu.php"; ?>
   <?php
   // Create blank variables to store our $_POST information
-  $netIdErr = $firstNameErr = $lastNameErr = $emailErr = $servicesErr = $timeErr = $daysErr = "";
-  $netId = $firstName = $lastName = $email = $services = $time = $days = "";
+  $netIdErr = $firstNameErr = $lastNameErr = $emailErr = $servicesErr = $timeErr = $daysErr = $passErr = "";
+  $netId = $firstName = $lastName = $email = $services = $time = $days = $password = $svcSuggestion = "";
   // Boolean to make sure everything was entered.
   $confirmation = true;
 
@@ -45,6 +45,14 @@
     } else {
       $netId = test_input($_POST["netId"]);
       echo "KSU NetID: " . $netId . "<br>";
+    }
+
+    if (empty($_POST["pass"]) || empty($_POST["passConfirm"])) {
+      $passErr = "You must enter a password.";
+      echo $passErr . "<br>";
+      $confirmation = false;
+    } else {
+      $password = $_POST["pass"];
     }
 
     if (empty($_POST["firstName"])) {
@@ -105,6 +113,10 @@
       echo "Available Times: " . $time  . "<br>";
     }
 
+    if(!empty($_POST['svcSuggestion']) || strlen($_POST['svcSuggestion']) >= 3){
+      $svcSuggestion = $_POST['svcSuggestion'];
+    }
+
     $date = date("m/d/y");
     // Msg that we'll send in an email, assuming everything was filled out.
     $msg = $firstName . " " . $lastName . " (". $email . ") " . "Thanks for registering! " . "\n" . $date . "\n".$netId . "\n" .
@@ -113,6 +125,67 @@
 
     // Boolan value to make sure everything was filled out.
     if($confirmation){
+
+      //new record information from user and pass it to this //script for insertion
+      // connect to ldap server
+      $ldapconn = ldap_connect("localhost")
+      or die("Could not connect to LDAP server.");
+
+      // use OpenDJ version V3 protocol
+      if (ldap_set_option($ldapconn,LDAP_OPT_PROTOCOL_VERSION,3)){
+      } // end if
+      else {
+         echo "<p>Failed to set version to protocol 3</p>";
+      } // end else
+
+      //administrator credentials in order to add new entries
+      $ldaprdn = "cn=manager,dc=designstudio1,dc=com";
+      $ldappass = "my*password"; // associated password
+
+      if ($ldapconn) {
+          // binding to ldap server
+          $ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);
+
+          // verify binding
+         if ($ldapbind) {
+            echo "<p>LDAP bind successful...</p>";
+            //create new record
+            $ldaprecord['givenName'] = $firstName;
+            $ldaprecord['sn'] = $lastName;
+            $ldaprecord['cn'] = $netId;
+            $ldaprecord['objectclass'][0] = "top";
+            $ldaprecord['objectclass'][1] = "person";
+            $ldaprecord['objectclass'][2] = "inetOrgPerson";
+            $ldaprecord['userPassword'] = $password;
+            $ldaprecord['mail'] = $email;
+
+            //add new record
+            if (ldap_add($ldapconn, "cn=" . $netId .
+               ",dc=designstudio1,dc=com", $ldaprecord)){
+                $msg = "Thank you <b>" . $firstName . " " .
+                   $lastName . "</b> for registering on our" .
+                      " website.";
+                //display thank you message on the website
+                echo $msg;
+
+            } // end if
+            else {
+                echo "Error #: " . ldap_errno($ldapconn) . "<br />\n";
+                echo "Error: " . ldap_error($ldapconn) . "<br />\n";
+                echo("<p>Failed to register you! (add error)</p>");
+            }
+         } // end if
+         else {
+            echo("<p>Failed to register you! (bind error)</p>");
+         } // end else
+         //close ldap connection VERY IMPORTANT
+         ldap_close($ldapconn);
+      } //end if
+      else {
+           echo("<p>Failed to register you! (no ldap server) </p>");
+      } //end else
+
+      // Check to see if the user wants an email.
       if(!empty($_POST['emailConfirmation'])){
         $emailChk=true;
       }else{
@@ -141,6 +214,17 @@
         // in the last query for current connection
         $profile_id = mysqli_insert_id($conn);
         mysqli_stmt_close($query);
+
+        // Insert service suggestion if the field isn't empty
+        $query = mysqli_prepare($conn,
+        "INSERT INTO service_suggestion (service_description, profileID) VALUES(?,?)")
+          or die("Error: ". mysqli_error($conn));
+          // bind parameters "s" - string
+        mysqli_stmt_bind_param ($query, "si",$svcSuggestion,$profile_id);
+
+        mysqli_stmt_execute($query)
+          or die("Error. Could not insert into the table."
+            . mysqli_error($conn));
       }
 
 

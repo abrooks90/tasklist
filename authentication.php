@@ -37,7 +37,6 @@
 
   if (ldap_set_option($ldapconn,LDAP_OPT_PROTOCOL_VERSION,3))
   {
-      echo "";//"Using LDAP v3";
   }else{
       echo "Failed to set version to protocol 3";
   }
@@ -47,8 +46,18 @@
       $ldapbind = @ldap_bind($ldapconn, $ldaprdn, $ldappass);
       // verify binding
       if ($ldapbind) {
+
+				$dn = "dc=designstudio1,dc=com";
+				$filter="(&(cn=".$name.")(isMemberOf=cn=serviceAdmin,dc=designstudio1,dc=com))";
+				$justthese = array("cn");
+
+				$sr=ldap_search($ldapconn, $dn, $filter, $justthese);
+
+				$info = ldap_get_entries($ldapconn, $sr);
+
         $_SESSION["authenticated"] = 1;
         $_SESSION["user"] = $name;
+				$_SESSION["serviceAdmin"] = $info["count"];
         header("location:home.php");
       } else {
         $_SESSION["authenticated"] = 0;

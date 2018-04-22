@@ -25,33 +25,34 @@ if (!isset($_SESSION['authenticated'])) {
 				}
 			}
 
-			function loadResponse(obj){
+			function loadResponse(){
 				var id = document.forms['tasks'].taskID.value;
 				xmlReq = new XMLHttpRequest();
 				xmlReq.onreadystatechange = processResponse;
-				xmlReq.open("POST", "tasks.php", true);
+				xmlReq.open("POST", "get_recipients.php", true);
 				parameter = "taskID=" + encodeURI(document.forms['tasks'].taskID.value);
 				xmlReq.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 				xmlReq.send(parameter);
 				return false;
 			}
-
+			
+			function loadResponse2(){
+				if(confirm("Are you sure you want to mark this task as complete?")){
+					document.forms["tasks"].action = "mark_complete.php";
+					document.forms["tasks"].submit();
+				}else{
+					alert("Incomplete");
+					return false;
+				}
+			}
+			
 			function checkrecipient(){
-				var recipients = document.forms['recipients'].recipient.value;
+				var recipients = document.forms['tasks'].recipient.value;
 				if(!recipients){
 					alert("Please select a person");
 					return false;
 				}
 				else{
-          // If a recipient for the selected tag is chosen, send the call to tasks.php to transfer the task.
-					var id = document.forms['tasks'].taskID.value;
-					xmlReq = new XMLHttpRequest();
-					xmlReq.onreadystatechange = processResponse;
-					xmlReq.open("POST", "tasks.php", true);
-					parameter = "taskID=" + encodeURI(document.forms['tasks'].taskID.value);
-					xmlReq.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-					xmlReq.send(parameter);
-					return false;
 					return true;
 				}
 			}
@@ -65,56 +66,52 @@ if (!isset($_SESSION['authenticated'])) {
 			<?php include "side_nav.php"; ?>
 			<h3>Transfer a Task:</h3>
 
-			<form class="tasks" action="" id="tasks" method="post" onsubmit="return checkrecipient(this)">
-				<?php include "menu.php"; ?>
-				<?php
-        // Check to see if there's a valid session. If not, display link to login page.
+			<form class="tasks" action="transfer.php" id="tasks" method="post" onsubmit="return checkrecipient()">
+				<?php include "menu.php";
+				// Check to see if there's a valid session. If not, display link to login page.
 				if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1) {
 				    echo "ERROR: To use this web site, you need to have valid credentials.  <a href='login.php'>Log in here.</a>";
 				}
 				else {
-				?>
-				<?php
-				$conn = new mysqli("localhost", "student_user","my*password", "abrooks");
-				if (mysqli_connect_errno()){
-					die('Cannot connect to database: ' . mysqli_connect_error($conn));
-				}
-				else{
-					$query = mysqli_prepare($conn,"SELECT profileID FROM profile where netID = ?");
-					mysqli_stmt_bind_param($query,"s",$_SESSION['user']);
-					mysqli_stmt_execute($query);
-					mysqli_stmt_bind_result($query,$profID);
-					$result = mysqli_stmt_get_result($query);
-					while($row=mysqli_fetch_array($result)){
-						$profileID = $row['profileID'];
-					}
-					mysqli_stmt_close($query);
-					$query = mysqli_prepare($conn,"SELECT task_description,task_due_date,service_description, taskID FROM tasks INNER JOIN services ON tasks.svcID = services.svcID INNER JOIN profile on tasks.assigned_user = profile.profileID WHERE assigned_user = ?")
-						or die("Error: " . mysqli_error($conn));
-					mysqli_stmt_bind_param($query,"i",$profileID);
-					mysqli_stmt_execute($query)
-						or die("Error: ". mysqli_error($conn));
-					$result = mysqli_stmt_get_result($query);
-					mysqli_close($conn);
-					mysqli_stmt_close($query);
-
-					if(!$result){
-						die("Error: " . mysqli_error($conn));
+					$conn = new mysqli("localhost", "student_user","my*password", "abrooks");
+					if (mysqli_connect_errno()){
+						die('Cannot connect to database: ' . mysqli_connect_error($conn));
 					}
 					else{
-						echo "<table>";
-						echo "<th></th><th>Task Description</th><th>Due Date</th><th>Service</th></tr>";
-						while($row = mysqli_fetch_array($result)){
-							echo "<tr><td><input type='radio' name='taskID' value='{$row['taskID']}' onchange='return loadResponse()'/></td><td>{$row['task_description']}</td><td>{$row['task_due_date']}</td><td>{$row['service_description']}</td></tr>";
+						$query = mysqli_prepare($conn,"SELECT profileID FROM profile where netID = ?");
+						mysqli_stmt_bind_param($query,"s",$_SESSION['user']);
+						mysqli_stmt_execute($query);
+						mysqli_stmt_bind_result($query,$profID);
+						$result = mysqli_stmt_get_result($query);
+						while($row=mysqli_fetch_array($result)){
+							$profileID = $row['profileID'];
 						}
-						echo "</table>";
+						mysqli_stmt_close($query);
+						$query = mysqli_prepare($conn,"SELECT task_description,task_due_date,service_description, taskID FROM tasks INNER JOIN services ON tasks.svcID = services.svcID INNER JOIN profile on tasks.assigned_user = profile.profileID WHERE assigned_user = ? AND complete = 'N'")
+							or die("Error: " . mysqli_error($conn));
+						mysqli_stmt_bind_param($query,"i",$profileID);
+						mysqli_stmt_execute($query)
+							or die("Error: ". mysqli_error($conn));
+						$result = mysqli_stmt_get_result($query);
+						mysqli_close($conn);
+						mysqli_stmt_close($query);
+	
+						if(!$result){
+							die("Error: " . mysqli_error($conn));
+						}
+						else{
+							echo "<div class='trow'><div class='tcell'>Task description</div><div class='tcell'>Due date</div><div class='tcell'>Service</div><div class='tcell'>Transfer task</div><div class='tcell'>Mark complete</div></div>";
+							while($row = mysqli_fetch_array($result)){
+								echo "<div class='trow'><div class='tcell'>{$row['task_description']}</div><div class='tcell'>{$row['task_due_date']}</div><div class='tcell'>{$row['service_description']}</div><div class='tcell'><input type='radio' name='taskID' value='{$row['taskID']}' onchange='return loadResponse()'/></div><div class='tcell'><input type='radio' name='markcomplete' value='{$row['taskID']}' onchange='return loadResponse2()'/></div></div>";
+							}
+						}
 					}
-				}
 				?>
+				<br/>
 				<div id="recipients"></div>
 			</form>
 		</div>
-<!-- Closing tag for our previous statement that checks for a valid session -->
-<?php } ?>
+	<!-- Closing tag for our previous statement that checks for a valid session -->
+	<?php } ?>
 	</body>
 </html>
