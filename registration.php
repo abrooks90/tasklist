@@ -35,6 +35,11 @@ function formValidation(){
   }else if ($("#pass").val() !== $("#passConfirm").val()) {
     return false;
   }
+
+  if(!$("#svcSuggestion").val() == "" && $("#svcSuggestion").val().length < 3){
+    alert("Enter a service suggestion greater than three characters!");
+    return false;
+  }
 }
 
 
@@ -97,6 +102,7 @@ function formValidation(){
       while($row = mysqli_fetch_array($result)){
         echo " <label><input type='checkbox' class='service' value='{$row['service_description']}' name='services[]'>{$row['service_description']}</label>";
       }
+      echo "<p><label for='svcSuggestion'>Suggest a service:</label><input type='text' pattern='{3,}' title='Enter a service suggestion greater than 3 characters.' name='svcSuggestion' id='svcSuggestion'></p>";
       echo "</fieldset>";
     }
     ?>

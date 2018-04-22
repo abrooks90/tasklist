@@ -27,8 +27,12 @@ echo "<nav id='navigation'>
     <li><a href='services.php'>Search Services</a></li>
     <li><a href='new_task.php'>New Task</a></li>
     <li><a href='transfer_tasks.php'>Transfer Task</a></li>
-    <li><a href='logout.php'>Logout</a></li>
-    </ul>
-  </nav>";
+    ";
+
+    if($_SESSION['serviceAdmin'] == 1){
+      echo "<li><a href='administrator.php'>Admin</a></li>";
+    }
+    echo "<li><a href='logout.php'>Logout</a></li>
+    </ul> </nav>";
 }
 ?>

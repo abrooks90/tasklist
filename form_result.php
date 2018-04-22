@@ -22,7 +22,7 @@
   <?php
   // Create blank variables to store our $_POST information
   $netIdErr = $firstNameErr = $lastNameErr = $emailErr = $servicesErr = $timeErr = $daysErr = $passErr = "";
-  $netId = $firstName = $lastName = $email = $services = $time = $days = $password = "";
+  $netId = $firstName = $lastName = $email = $services = $time = $days = $password = $svcSuggestion = "";
   // Boolean to make sure everything was entered.
   $confirmation = true;
 
@@ -113,6 +113,10 @@
       echo "Available Times: " . $time  . "<br>";
     }
 
+    if(!empty($_POST['svcSuggestion']) || strlen($_POST['svcSuggestion']) >= 3){
+      $svcSuggestion = $_POST['svcSuggestion'];
+    }
+
     $date = date("m/d/y");
     // Msg that we'll send in an email, assuming everything was filled out.
     $msg = $firstName . " " . $lastName . " (". $email . ") " . "Thanks for registering! " . "\n" . $date . "\n".$netId . "\n" .
@@ -129,7 +133,6 @@
 
       // use OpenDJ version V3 protocol
       if (ldap_set_option($ldapconn,LDAP_OPT_PROTOCOL_VERSION,3)){
-         echo "<p>Using LDAP v3</p>";
       } // end if
       else {
          echo "<p>Failed to set version to protocol 3</p>";
@@ -211,6 +214,17 @@
         // in the last query for current connection
         $profile_id = mysqli_insert_id($conn);
         mysqli_stmt_close($query);
+
+        // Insert service suggestion if the field isn't empty
+        $query = mysqli_prepare($conn,
+        "INSERT INTO service_suggestion (service_description, profileID) VALUES(?,?)")
+          or die("Error: ". mysqli_error($conn));
+          // bind parameters "s" - string
+        mysqli_stmt_bind_param ($query, "si",$svcSuggestion,$profile_id);
+
+        mysqli_stmt_execute($query)
+          or die("Error. Could not insert into the table."
+            . mysqli_error($conn));
       }
 
 
