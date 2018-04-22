@@ -42,9 +42,7 @@ if (!isset($_SESSION['authenticated'])) {
     // Close the connection and the prepared statement
     $result = mysqli_stmt_get_result($query);
 
-    mysqli_close($conn);
-    mysqli_stmt_close($query);
-
+    if(count($result) > 1){
 
     // We're going to display the information as a select menu using PHP to echo HTML
     if (!$result) {
@@ -57,12 +55,21 @@ if (!isset($_SESSION['authenticated'])) {
         $i++;
       }
       echo "</fieldset>";
+      echo "<fieldset>
+       <input type='submit' value='Submit' />
+      </fieldset>";
+
     }
+  }else {
+    echo "Nothing to display";
+  }
 }
+
+    mysqli_stmt_close($query);
+    mysqli_close($conn);
+
    ?>
-    <fieldset>
-     <input type="submit" value="Submit" />
-    </fieldset>
+
  </form>
 </div>
 
