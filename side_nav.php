@@ -14,7 +14,7 @@ echo "<nav id='navigation'>
   <li><a href='home.php'>Home</a></li>
   <li><a href='registration.php'>Registration</a></li>
   <li><a href='services.php'>Search Services</a></li>
-  <li><a href='Login.php'>Login</a></li>
+  <li><a href='login.php'>Login</a></li>
   </ul>
 </nav>";
 }else{
@@ -26,7 +26,8 @@ echo "<nav id='navigation'>
     <li><a href='registration.php'>Registration</a></li>
     <li><a href='services.php'>Search Services</a></li>
     <li><a href='new_task.php'>New Task</a></li>
-    <li><a href='transfer_tasks.php'>Transfer Task</a></li>
+    <li><a href='tasks.php'>Tasks</a></li>
+    <li><a href='profile.php'>Profile</a></li>
     ";
 
     if($_SESSION['serviceAdmin'] == 1){

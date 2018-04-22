@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,11 +12,28 @@
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script>
       $(function () {
+      
+        $('.service_select').on('change', function() {
+            var selected = $(this).val();
+            var dataString = "selected="+selected;
+            $.ajax({
+                type: "POST",
+                url: "assign_user.php",
+                data: dataString,
+                success: function(result) {
+                    if (result=="<option value=''>Assign a user</option>") {
+                        $('#assignUser').html("<option value=''>Assign a user</option>")
+                    } else {
+                        $('#assignUser').html("<option value=''>Assign a user</option>").append(result);
+                    } 
+                }
+            });
+        });
 
         $('form').on('submit', function (e) {
-
+      
           e.preventDefault();
-
+      
           $.ajax({
             type: 'POST',
             url: 'new_task_result.php',
@@ -22,61 +42,75 @@
               $(".success").html('Form submitted successfully!');
             }
           });
-
+      
         });
 
+        
+        
+      
       });
     </script>
-    <script src="new_task.js"></script>
 </head>
 <body>
     <header>
 	    <h1>KSU Student Services</h1>
     </header>
     <div id="wrapper">
-    <?php include "side_nav.php"; ?>
+    <?php include 'side_nav.php';?>
     <h3>Add New Task</h3>
-    <form id="newTask" action="new_task_result.php" method="POST" onsubmit="return validate();">
-        <?php include 'menu.php'; ?>
+    <form id="newTask" action="new_task_result.php" method="POST">
+        <?php include 'menu.php';?>
+        <h4><?php
+if (!isset($_SESSION['user'])) {
+	echo "ERROR: To use this web site you need to have valid credentials.  <a href='login.php'>Log in here.</a>";
+	exit;
+}
+?></h4>
         <span class="success"></span>
         <fieldset id="task">
-            <label>Your KSU NetID: <input type="text" id="netID" name="netID" placeholder="Enter NetID" required autofocus></label>
+            <label>Your KSU NetID is: <input type="text" id="netID" name="netID" placeholder="<?php echo $_SESSION['user']; ?>" disabled></label>
             <br><br>
-            <?php
-                $conn = new mysqli("localhost", "student_user", "my*password", "abrooks");
-                $query1 = mysqli_prepare($conn, "SELECT service_description FROM services") or die("Error: ". mysqli_error($conn));
-                mysqli_stmt_execute($query1) or die("Error. Could not insert into the table." . mysqli_error($conn));
-                $result1 = mysqli_stmt_get_result($query1);
-                mysqli_close($conn);
-                mysqli_stmt_close($query1);
-                if (!$result1) {
-                    die("Invalid query: " . mysqli_error($conn));
-                } else {
-                    echo "<label>Request a Service: <select name='service_select' required><option value=''>Select Service</option>";
-                    while($row = mysqli_fetch_array($result1)){
-                        echo "<option>{$row['service_description']}</option>";
-                    }
-                    echo "</select><label>";
-                }
-            ?>
+
+<?php
+$conn = new mysqli("localhost", "student_user", "my*password", "abrooks");
+$query1 = mysqli_prepare($conn, "SELECT svcID, service_description FROM services") or die("Error: " . mysqli_error($conn));
+mysqli_stmt_execute($query1) or die("Error. Could not insert into the table." . mysqli_error($conn));
+$result1 = mysqli_stmt_get_result($query1);
+mysqli_stmt_close($query1);
+if (!$result1) {
+	die("Invalid query: " . mysqli_error($conn));
+} else {
+    echo "<label>Request a Service: <select class='service_select' name='service_select' required>";
+    echo "<option value=''>Select a service</option>";
+	while ($row = mysqli_fetch_array($result1)) {
+		echo "<option>{$row['service_description']}</option>";
+	}
+	echo "</select><label>";
+}
+?>
             <br><br>
-            <label>Assign a User (E-Mail): <select name="assign_user" required>
-                <option value="">Assign a User</option>
-                <?php
-                    $conn = new mysqli("localhost", "student_user", "my*password", "abrooks");
-                    $query2 = mysqli_prepare($conn, "SELECT email FROM profile") or die("Error: ". mysqli_error($conn));
-                    mysqli_stmt_execute($query2) or die("Error. Could not insert into the table." . mysqli_error($conn));
-                    $result2 = mysqli_stmt_get_result($query2);
-                    mysqli_close($conn);
-                    mysqli_stmt_close($query2);
-                    if (!$result2) {
-                        die("Invalid query: " . mysqli_error($conn));
-                    } else {
-                        while($row = mysqli_fetch_array($result2)){
-                            echo "<option>{$row['email']}</option>";
-                        }
-                    }
-                ?>
+            <label>Assign a User (E-Mail): <select id="assignUser" name="assign_user" required>
+            <option value="">Assign a user</option>
+
+<?php
+// if ($query2 = mysqli_prepare($conn, "SELECT email FROM profile")) {
+// 	mysqli_stmt_bind_param($query2, "is", $service, $_SESSION['user']);
+// 	mysqli_stmt_execute($query2);
+// 	mysqli_stmt_bind_result($query2, $email);
+// 	mysqli_stmt_store_result($query2);
+// 	if (mysqli_stmt_num_rows($query2) == 0) {
+// 		echo "No valid recipients found<br/>";
+// 	} else {
+// 		while (mysqli_stmt_fetch($query2)) {
+// 			echo "<option>{$email}</option>";
+// 		}
+// 	}
+// } else {
+// 	echo "Could not make a connection";
+// }
+// mysqli_close($conn);
+// mysqli_stmt_close($query2);
+?>
             </select></label>
             <br><br>
             <label>Task Deadline: <input type="date" name="taskDeadline" required></label>

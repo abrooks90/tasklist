@@ -1,7 +1,7 @@
 <?php
 	@session_start(); //start session
 	//see http://phpsec.org/projects/guide/4.html
-	
+
 	//prevent unauthorized access using back button
 	if (!isset($_SESSION['authenticated'])) {
 		session_regenerate_id();
@@ -38,7 +38,7 @@
 					return false;
 				}
 			}
-			
+
 			//let user update profile information
 			function makeEditable(){
 				$(".editable").prop("readonly", false);
@@ -55,12 +55,12 @@
 		<div id="wrapper">
 			<?php
 				//include side navigation menu
-				include "side_nav.php"; 
+				include "side_nav.php";
 			?>
 			<h3>User Profile</h3>
 
 			<form class="profile" action="update_profile.php" id="profile" method="post" onsubmit="return formValidation()">
-				<?php 
+				<?php
 					//include menu
 					include "menu.php";
 					// Check to see if there's a valid session. If not, display link to login page.
@@ -88,7 +88,7 @@
 							}
 							//close first query
 							mysqli_stmt_close($query);
-							
+
 							//gets profile information from profile based on profileID
 							$query = mysqli_prepare($conn,"SELECT netID, fname, lname, email, avail_days, avail_hours FROM profile WHERE profileID = ?")
 								or die("Error: " . mysqli_error($conn));
@@ -98,7 +98,7 @@
 							$result = mysqli_stmt_get_result($query);
 							//closes second query
 							mysqli_stmt_close($query);
-							
+
 							//gets svcID from services_offered based on profileID
 							$query = mysqli_prepare($conn,"SELECT service_description from services INNER JOIN services_offered on services.svcID = services_offered.svcID WHERE profileID = ?")
 								or die("Error: ". mysqli_error($conn));
@@ -108,7 +108,7 @@
 							$result2 = mysqli_stmt_get_result($query);
 							//closes third query
 							mysqli_stmt_close($query);
-							
+
 							//gets service names from services based on svcIDs
 							$query = mysqli_prepare($conn,"SELECT svcID, service_description from services")
 								or die("Error: " . mysqli_error($conn));
@@ -119,9 +119,9 @@
 							mysqli_stmt_close($query);
 							//closes connection
 							mysqli_close($conn);
-							
+
 							//makes sure all queries were successful
-							if(!$result && !$result2 && !result3){
+							if(!$result && !$result2 && !$result3){
 								echo "Error occurred in retrieving information.";
 							}
 							else{
@@ -139,7 +139,7 @@
 									echo "<label>First Name:<input type='text' pattern='[A-Za-z]{3,}' title='Please enter a name with at least three letters.' name='firstName' class='editable' required readonly placeholder='{$row['fname']}' value='{$row['fname']}'/></label><br>";
 									echo "<label>Last Name:<input type='text' pattern='[A-Za-z]{3,}' title='Please enter a name with at least three letters.' name='lastName' class='editable' required readonly placeholder='{$row['lname']}' value = '{$row['lname']}'/></label><br>";
 									echo "</fieldset>";
-									
+
 									//displays string of services in a fieldset
 									echo "<fieldset id='show_services' class='viewable'>";
 									echo "<legend>Services:</legend>";
@@ -161,7 +161,7 @@
 										echo ">{$row3['service_description']}</label>";
 									}
 									echo "</fieldset>";
-									
+
 									//displays string of days marked available
 									echo "<fieldset id='show_days' class='viewable'>";
 									echo "<legend>Available Days:</legend>";
@@ -171,11 +171,11 @@
 									//when edit button is presssed, displays days as checkboxes similar to registration
 									$days = explode(",",$row['avail_days']);
 									echo '<fieldset id="days" hidden class="editable"><legend>Select Available Days:</legend>';
-									echo '<label><input type="checkbox" class="days" value="Sun" '; 
+									echo '<label><input type="checkbox" class="days" value="Sun" ';
 										//checks if day is offered and checks box if it is
 										if(in_array("Sun",$days)){
 											echo "checked";
-										} 
+										}
 									echo ' name="days[]" >Sun</label>';
 									echo '<label><input type="checkbox" class="days" value="Mon" ';
 										if(in_array("Mon",$days)){
@@ -208,13 +208,13 @@
 										}
 									echo ' name="days[]" >Sat</label>';
 									echo "</fieldset>";
-									
+
 									//displays string of times marked available
 									echo "<fieldset id='show_times' class='viewable'>";
 									echo "<legend>Available Times:</legend>";
 									echo $row['avail_hours'];
 									echo "</fieldset>";
-									
+
 									//when edit button is pressed, displays times as checkboxes similar to registration
 									$times = explode(",",$row['avail_hours']);
 									echo '<fieldset id="availability" class="editable" hidden>';
@@ -265,7 +265,7 @@
 								}
 								//adds profile and email for use in submission processing
 								echo "<input type='hidden' name='profileID' value={$profileID} />";
-								echo "<input type='hidden' name='oldEmail' value = {$oldEmail} />";
+								echo "<input type='hidden' name='oldEmail' value={$oldEmail} />";
 							}
 						}
 				?>
