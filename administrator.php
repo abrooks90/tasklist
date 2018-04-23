@@ -68,7 +68,7 @@ $(function () {
       $i = 0;
       echo "<fieldset id='administration'>";
       while($row = mysqli_fetch_array($result)){
-        echo "<label>{$row['service_description']} <input type='radio' name='$i' value='{$row['service_description']},INSERT' checked>Add</input>  <input type='radio' name='$i' value='{$row['service_description']},DELETE'>Delete</input></label><br>";
+        echo "<label>{$row['service_description']} <input type='radio' name='$i' value='{$row['service_description']},INSERT' checked required>Add</input>  <input type='radio' name='$i' value='{$row['service_description']},DELETE' required>Delete</input></label><br>";
         $i++;
       }
       echo "

@@ -15,7 +15,7 @@
 
   <h3>Student Services Login</h3>
 
-  <form id="login" method="post" action="authentication.php">
+  <form id="login" method="post" action="authentication.php" >
     <?php include "menu.php"; ?>
     <fieldset>
     <label for="userID">User ID: </label><input type="text" name="userID" required><br>
