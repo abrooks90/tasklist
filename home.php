@@ -22,6 +22,7 @@
       Andrew Brooks<br>
       Michael Farris<br>
       Joshua Hutchins<br>
+      Mohamed Nedjar
     </p>
 
     <p>
