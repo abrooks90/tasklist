@@ -113,10 +113,6 @@
       echo "Available Times: " . $time  . "<br>";
     }
 
-    if(!empty($_POST['svcSuggestion']) || strlen($_POST['svcSuggestion']) >= 3){
-      $svcSuggestion = $_POST['svcSuggestion'];
-    }
-
     $date = date("m/d/y");
     // Msg that we'll send in an email, assuming everything was filled out.
     $msg = $firstName . " " . $lastName . " (". $email . ") " . "Thanks for registering! " . "\n" . $date . "\n".$netId . "\n" .
@@ -148,7 +144,6 @@
 
           // verify binding
          if ($ldapbind) {
-            echo "<p>LDAP bind successful...</p>";
             //create new record
             $ldaprecord['givenName'] = $firstName;
             $ldaprecord['sn'] = $lastName;
@@ -160,7 +155,7 @@
             $ldaprecord['mail'] = $email;
 
             //add new record
-            if (ldap_add($ldapconn, "cn=" . $netId .
+            if (@ldap_add($ldapconn, "cn=" . $netId .
                ",dc=designstudio1,dc=com", $ldaprecord)){
                 $msg = "Thank you <b>" . $firstName . " " .
                    $lastName . "</b> for registering on our" .
@@ -170,9 +165,8 @@
 
             } // end if
             else {
-                echo "Error #: " . ldap_errno($ldapconn) . "<br />\n";
-                echo "Error: " . ldap_error($ldapconn) . "<br />\n";
-                echo("<p>Failed to register you! (add error)</p>");
+                echo "<br>User already exists";
+                exit;
             }
          } // end if
          else {
@@ -216,6 +210,8 @@
         mysqli_stmt_close($query);
 
         // Insert service suggestion if the field isn't empty
+        if(!empty($_POST['svcSuggestion']) || strlen($_POST['svcSuggestion']) >= 3){
+          $svcSuggestion = $_POST['svcSuggestion'];
         $query = mysqli_prepare($conn,
         "INSERT INTO service_suggestion (service_description, profileID) VALUES(?,?)")
           or die("Error: ". mysqli_error($conn));
@@ -225,6 +221,7 @@
         mysqli_stmt_execute($query)
           or die("Error. Could not insert into the table."
             . mysqli_error($conn));
+          }
       }
 
 

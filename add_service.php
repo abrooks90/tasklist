@@ -5,8 +5,6 @@
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
 <?php
 
 $conn = new mysqli("localhost", "student_user","my*password", "abrooks");
@@ -34,6 +32,7 @@ foreach ($add_delete as $value) {
       or die("Error. Could not insert into the table."
         . mysqli_error($conn));
     mysqli_stmt_close($query);
+    echo $test[0]. " has been deleted.";
 
   }elseif ($test[1] == "INSERT") {
     // Insert the new service into the services table
@@ -46,6 +45,7 @@ foreach ($add_delete as $value) {
       or die("Error. Could not insert into the table."
         . mysqli_error($conn));
     mysqli_stmt_close($query);
+    echo $test[0]. " has been added to available services and linked to the requestor's profile.";
 
     // Insert the svcID and profileID into the services_offered table
     $query = mysqli_prepare($conn,
@@ -70,17 +70,9 @@ foreach ($add_delete as $value) {
     mysqli_stmt_close($query);
   }
 }
-
+mysqli_close($conn);
 }
 
 ?>
 </body>;
 </html>
-
-<?php
-
-// specify database connection credentials
-
-
-
-?>

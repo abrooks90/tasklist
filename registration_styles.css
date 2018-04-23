@@ -123,6 +123,20 @@ nav {
   border-radius: 10px;
 }
 
+#home {
+  width: 80%;
+  min-height: 660px;
+  margin-left:auto;
+  margin-top: 10px;
+  background-color: #EAE8EB;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#home li{
+  list-style-type: none;
+}
+
 #wrapper{
   margin-top: 15px;
 }

@@ -14,6 +14,23 @@ if (!isset($_SESSION['authenticated'])) {
 <title>KSU Student Services | Homepage</title>
 <link rel="stylesheet" type="text/css" href="registration_styles.css" media="screen">
 <script src="http://code.jquery.com/jquery.min.js"></script>
+<script>
+$(function () {
+  $('#administrator').on('submit', function (e) {
+
+    e.preventDefault();
+
+    $.ajax({
+      type: 'POST',
+      url: 'add_service.php',
+      data: $('#administrator').serialize(),
+      success: function (data) {
+        $("#administration").html(data);
+      }
+    });
+  });
+});
+</script>
 </head>
 <body>
   <header>
@@ -23,7 +40,7 @@ if (!isset($_SESSION['authenticated'])) {
 <div id="wrapper">
   <?php include "side_nav.php"; ?>
   <h3>Student Services Administration</h3>
-  <form method="post" action="add_service.php">
+  <form id="administrator" method="post" action="" >
     <?php include "menu.php";
 
     if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1 OR $_SESSION['serviceAdmin'] == 0) {
@@ -42,7 +59,7 @@ if (!isset($_SESSION['authenticated'])) {
     // Close the connection and the prepared statement
     $result = mysqli_stmt_get_result($query);
 
-    if(count($result) > 1){
+    if(mysqli_num_rows($result) != 0){
 
     // We're going to display the information as a select menu using PHP to echo HTML
     if (!$result) {
@@ -54,14 +71,15 @@ if (!isset($_SESSION['authenticated'])) {
         echo "<label>{$row['service_description']} <input type='radio' name='$i' value='{$row['service_description']},INSERT' checked>Add</input>  <input type='radio' name='$i' value='{$row['service_description']},DELETE'>Delete</input></label><br>";
         $i++;
       }
-      echo "</fieldset>";
-      echo "<fieldset>
-       <input type='submit' value='Submit' />
+      echo "
+       <input type='submit' value='Submit' onclick='loadResponse()'/>
       </fieldset>";
-
     }
   }else {
-    echo "Nothing to display";
+    echo "No service additions to display.";
+
+
+
   }
 }
 
@@ -69,7 +87,7 @@ if (!isset($_SESSION['authenticated'])) {
     mysqli_close($conn);
 
    ?>
-
+<div id="placeholder"></div>
  </form>
 </div>
 
