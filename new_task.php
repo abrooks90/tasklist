@@ -1,5 +1,11 @@
 <?php
-session_start();
+	@session_start(); //start session
+
+	//see http://phpsec.org/projects/guide/4.html
+	if (!isset($_SESSION['authenticated'])) {
+		session_regenerate_id();
+		$_SESSION['authenticated'] = 0;
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +18,7 @@ session_start();
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
     <script>
       $(function () {
-      
+
         $('.service_select').on('change', function() {
             var selected = $(this).val();
             var dataString = "selected="+selected;
@@ -25,15 +31,15 @@ session_start();
                         $('#assignUser').html("<option value=''>Assign a user</option>")
                     } else {
                         $('#assignUser').html("<option value=''>Assign a user</option>").append(result);
-                    } 
+                    }
                 }
             });
         });
 
         $('form').on('submit', function (e) {
-      
+
           e.preventDefault();
-      
+
           $.ajax({
             type: 'POST',
             url: 'new_task_result.php',
@@ -42,12 +48,7 @@ session_start();
               $(".success").html('Form submitted successfully!');
             }
           });
-      
         });
-
-        
-        
-      
       });
     </script>
 </head>
@@ -92,25 +93,6 @@ if (!$result1) {
             <label>Assign a User (E-Mail): <select id="assignUser" name="assign_user" required>
             <option value="">Assign a user</option>
 
-<?php
-// if ($query2 = mysqli_prepare($conn, "SELECT email FROM profile")) {
-// 	mysqli_stmt_bind_param($query2, "is", $service, $_SESSION['user']);
-// 	mysqli_stmt_execute($query2);
-// 	mysqli_stmt_bind_result($query2, $email);
-// 	mysqli_stmt_store_result($query2);
-// 	if (mysqli_stmt_num_rows($query2) == 0) {
-// 		echo "No valid recipients found<br/>";
-// 	} else {
-// 		while (mysqli_stmt_fetch($query2)) {
-// 			echo "<option>{$email}</option>";
-// 		}
-// 	}
-// } else {
-// 	echo "Could not make a connection";
-// }
-// mysqli_close($conn);
-// mysqli_stmt_close($query2);
-?>
             </select></label>
             <br><br>
             <label>Task Deadline: <input type="date" name="taskDeadline" required></label>

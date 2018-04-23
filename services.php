@@ -56,7 +56,7 @@
   <?php include "side_nav.php"; ?>
 
   <h3>Search Services</h3>
-  <form form id="search" name="form1" method="post" action="">
+  <form id="search" name="form1" method="post" action="">
     <?php include "menu.php"; ?>
     <?php
       // specify database connection credentials

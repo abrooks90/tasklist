@@ -21,18 +21,18 @@ if (!isset($_SESSION['authenticated'])) {
 
 		<div id="wrapper">
 			<?php //includes the navigation bar
-				include "side_nav.php"; 
+				include "side_nav.php";
 			?>
 
 			<h3>Profile Update</h3>
 			<div id="results">
 				<?php //includes the menu page
-					include "menu.php"; 
-					
+					include "menu.php";
+
 					// Create blank variables to store our $_POST information
 					$netIdErr = $firstNameErr = $lastNameErr = $emailErr = $servicesErr = $timeErr = $daysErr = "";
 					$netId = $firstName = $lastName = $email = $services = $time = $days = "";
-					
+
 					// Boolean to make sure everything was entered.
 					$confirmation = true;
 
@@ -43,7 +43,7 @@ if (!isset($_SESSION['authenticated'])) {
 						$data = htmlspecialchars($data);
 						return $data;
 					}
-	
+
 					// If any of the fields are empty, display an error. Otherwise, assign the value after testing the input.
 					if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						if (empty($_POST["netId"])) {
@@ -54,10 +54,10 @@ if (!isset($_SESSION['authenticated'])) {
 							$netId = test_input($_POST["netId"]);
 							echo "<div>KSU NetID: " . $netId . "</div>";
 						}
-						
+
 						// Msg that we'll send in an email, assuming everything was filled out.
 						$msg = $netId . ": Your profile has been updated.<br> The following is your updated information: <br>";
-						
+
 						if (empty($_POST["firstName"])) {
 							$firstNameErr = "First name is required";
 							echo $firstNameErr . "<br>";
@@ -116,19 +116,34 @@ if (!isset($_SESSION['authenticated'])) {
 							echo "<div>Available Times: " . $time  . "</div>";
 							$msg .= "Available Times: " . $time . "<br>";
 						}
-						
+
 						//gets the profileID of the user for updating tables
 						$profileID = $_POST['profileID'];
-						
+
 						//gets the users email address on file for checking if the email changed
 						$oldEmail = $_POST['oldEmail'];
-						
+
 						//gets the current date for time stamping
 						$date = date("m/d/y");
-						
+
 						// specify database connection credentials
 						$conn = new mysqli("localhost", "student_user","my*password", "abrooks");
-						
+            // Insert service suggestion if the field isn't empty
+            if(!empty($_POST['svcSuggestion']) || strlen($_POST['svcSuggestion']) >= 3){
+              $svcSuggestion = $_POST['svcSuggestion'];
+            $query = mysqli_prepare($conn,
+            "INSERT INTO service_suggestion (service_description, profileID) VALUES(?,?)")
+              or die("Error: ". mysqli_error($conn));
+              // bind parameters "s" - string
+            mysqli_stmt_bind_param ($query, "si",$svcSuggestion,$profile_id);
+
+            mysqli_stmt_execute($query)
+              or die("Error. Could not insert into the table."
+                . mysqli_error($conn));
+
+            mysqli_stmt_close($query);
+              }
+
 						// mysqli connect construct from http://php.net/manual/en/mysqli.construct.php
 						if (mysqli_connect_error()) {
 							die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
@@ -142,15 +157,15 @@ if (!isset($_SESSION['authenticated'])) {
 							  or die("Error. Could not insert into the table." . mysqli_error($conn));
 							mysqli_stmt_close($query);
 						}
-						
+
 						//remove previous services from services_offered, in case service is no longer offered
 						$query = mysqli_prepare($conn,"DELETE FROM services_offered WHERE profileID = ?");
 						mysqli_stmt_bind_param($query,"i",$profileID);
 						mysqli_stmt_execute($query)
 							or die("Error: " . mysqli_error($conn));
 						mysqli_stmt_close($query);
-						
-						
+
+
 						// Loop through the svcIDs to get the description for the message
 						$services = array();
 						foreach($_POST['services'] as $service) {
@@ -168,7 +183,7 @@ if (!isset($_SESSION['authenticated'])) {
 							// Assign primary key to a variable for our insert statement below
 							array_push($services, $row[0]);
 							mysqli_stmt_close($query);
-						
+
 							// Insert the primary key for the services table
 							// Insert the primary key for the profile table
 							$query = mysqli_prepare($conn, "INSERT INTO services_offered (svcID, profileID) VALUES (?,?)")
@@ -177,9 +192,9 @@ if (!isset($_SESSION['authenticated'])) {
 							mysqli_stmt_execute($query);
 							mysqli_stmt_close($query);
 						}
-						
+
 						$msg .= "Services Offered: " . implode(",",$services);
-						 
+
 						//Send email to user confirming profile update
 						$to = $email;
 						$subject = "Updated Profile";
@@ -189,7 +204,7 @@ if (!isset($_SESSION['authenticated'])) {
 						} else {
 							echo "<p>Confirmation email message delivery failed...</p>";
 						}
-						
+
 						//if the email address was changed, send email to old email for security
 						if($email != $oldEmail){
 							$to = $oldEmail;
@@ -199,10 +214,10 @@ if (!isset($_SESSION['authenticated'])) {
 								echo "<p>An email has also been sent to the original email address for confirmation.</p>";
 							}
 						}
-						
+
 						// Close the connection to mysql database
 						mysqli_close($conn);
-						  
+
 					} else {
 							// Display a message if any of the fields are left out.
 							echo "<p> All fields are required. Press the return button and complete the form. </p>";

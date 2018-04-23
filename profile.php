@@ -262,6 +262,10 @@
 										}
 									echo ">4PM-5PM</label>";
 									echo "</fieldset>";
+
+									echo '<fieldset id="svcSuggest" class="editable" hidden>';
+									echo "<p><label for='svcSuggestion'>Suggest a service:</label><input type='text' pattern='{3,}' title='Enter a service suggestion greater than 3 characters.' name='svcSuggestion' id='svcSuggestion'></p>";
+									echo "</fieldset>";
 								}
 								//adds profile and email for use in submission processing
 								echo "<input type='hidden' name='profileID' value={$profileID} />";
