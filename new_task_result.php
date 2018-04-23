@@ -1,9 +1,18 @@
 <?php
-session_start();
-include 'menu.php';
-if (!isset($_SESSION['user'])) {
-	exit;
-}
+	@session_start(); //start session
+
+	//see http://phpsec.org/projects/guide/4.html
+	if (!isset($_SESSION['authenticated'])) {
+		session_regenerate_id();
+		$_SESSION['authenticated'] = 0;
+	}
+
+
+	// Check to see if there's a valid session. If not, display link to login page.
+	if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1) {
+			header("location:home.php");
+	}
+	else {
 $conn = new mysqli("localhost", 'student_user', 'my*password', "abrooks");
 if (mysqli_connect_errno()) {
 	die('Cannot connect to database: ' . mysqli_connect_error($conn));
@@ -62,4 +71,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	}
 } else {
 	exit;
+}
 }

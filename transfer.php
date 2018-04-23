@@ -29,7 +29,7 @@
 
 				// Check to see if there's a valid session. If not, display link to login page.
 				if (!isset($_SESSION['authenticated']) OR !$_SESSION['authenticated'] == 1) {
-				    echo "ERROR: To use this web site, you need to have valid credentials.  <a href='login.php'>Log in here.</a>";
+				    echo "ERROR: To use this web site you need to have valid credentials.  <a href='login.php'>Log in here.</a>";
 				}
 				else {
 					//checks that a recipient was selected
