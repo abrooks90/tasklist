@@ -80,16 +80,16 @@ function formValidation(){
     <fieldset id="contact">
     <!--use the "pattern" and "title" fields to notify the end user of invalid input-->
     <!--NetID consists of alphanumerical input. Uppercase and lowercase and 0-9. Input should at least be 3 characters.-->
-    <label for="netId">KSU NetID:</label><input type="text" pattern="[A-Za-z0-9]{3,}" title="Please enter your alphanumerical NetID." name="netId" id="netId" required placeholder="Enter NetID">
-    <label for="pass">Password:</label><input type="password" title="Password should be 8 characters long and contain an uppercase, lowercase, and a number" pattern="^((?=^.{8,}$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$" name="pass" id="pass" required placeholder="Enter Password">
+    <label for="netId">KSU NetID:</label><input autofocus tabindex="1" type="text" pattern="[A-Za-z0-9]{3,}" title="Please enter your alphanumerical NetID." name="netId" id="netId" required placeholder="Enter NetID">
+    <label for="pass">Password:</label><input tabindex="2" type="password" title="Password should be 8 characters long and contain an uppercase, lowercase, and a number" pattern="^((?=^.{8,}$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$" name="pass" id="pass" required placeholder="Enter Password">
     <br>
     <!--First and last name are uppercase/lowercase with at least 3 letters.-->
-    <label for="firstName">First Name:</label><input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="firstName" id="firstName" required placeholder="Enter First Name">
-    <label for="passConfirm">Retype Pass:</label><input type="password" pattern="^((?=^.{8,}$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$" title="Password should be 8 characters long and contain an uppercase, lowercase, and a number" name="passConfirm" id="passConfirm" required placeholder="Confirm Password">
+    <label for="firstName">First Name:</label><input tabindex="4" type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="firstName" id="firstName" required placeholder="Enter First Name">
+    <label for="passConfirm">Retype Pass:</label><input tabindex="3" type="password" pattern="^((?=^.{8,}$)(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])).*$" title="Password should be 8 characters long and contain an uppercase, lowercase, and a number" name="passConfirm" id="passConfirm" required placeholder="Confirm Password">
     <br>
-    <label for="lastName">Last Name:</label><input type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="lastName" id="lastName" required placeholder="Enter Last Name"><br>
+    <label for="lastName">Last Name:</label><input tabindex="5" type="text" pattern="[A-Za-z]{3,}" title="Please enter a name with at least three letters." name="lastName" id="lastName" required placeholder="Enter Last Name"><br>
     <!--HTML5 has a built in pattern match for email-->
-    <label for="email">Email:</label><input type="email" name="email" id="email" required placeholder="Enter a valid Email"><br>
+    <label for="email">Email:</label><input tabindex="6" type="email" name="email" id="email" required placeholder="Enter a valid Email"><br>
     </fieldset>
 
 
