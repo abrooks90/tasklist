@@ -32,7 +32,7 @@ foreach ($add_delete as $value) {
       or die("Error. Could not insert into the table."
         . mysqli_error($conn));
     mysqli_stmt_close($query);
-    echo $test[0]. " has been deleted.";
+    echo $test[0]. " has been deleted. <br>";
 
   }elseif ($test[1] == "INSERT") {
     // Insert the new service into the services table
@@ -45,7 +45,7 @@ foreach ($add_delete as $value) {
       or die("Error. Could not insert into the table."
         . mysqli_error($conn));
     mysqli_stmt_close($query);
-    echo $test[0]. " has been added to available services and linked to the requestor's profile.";
+    echo $test[0]. " has been added to available services and linked to the requestor's profile. <br>";
 
     // Insert the svcID and profileID into the services_offered table
     $query = mysqli_prepare($conn,

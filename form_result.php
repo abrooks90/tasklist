@@ -157,11 +157,11 @@
             //add new record
             if (@ldap_add($ldapconn, "cn=" . $netId .
                ",dc=designstudio1,dc=com", $ldaprecord)){
-                $msg = "Thank you <b>" . $firstName . " " .
+                $msg1 = "Thank you <b>" . $firstName . " " .
                    $lastName . "</b> for registering on our" .
                       " website.";
                 //display thank you message on the website
-                echo $msg;
+                echo $msg1;
 
             } // end if
             else {
