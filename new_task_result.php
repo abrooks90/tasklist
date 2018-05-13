@@ -22,7 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$netID = $_SESSION['user'];
 		$email = "";
 		$taskDescription = $_POST['taskDescription'];
-		$serviceSelected = $_POST['service_select'];
+        $serviceSelected = $_POST['service_select'];
+        $svcTask = $serviceSelected;
 		$query1 = mysqli_prepare($conn, "SELECT svcID FROM services WHERE service_description=?");
 		mysqli_stmt_bind_param($query1, "s", $serviceSelected);
         mysqli_stmt_execute($query1) or die("Error. Could not select from the table." . mysqli_error($conn));
@@ -48,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
         $assignedUser = $_POST['assign_user'];
+        $to = $assignedUser;
         $query3 = mysqli_prepare($conn, "SELECT profileID FROM profile WHERE email=?");
         mysqli_stmt_bind_param($query3, "s", $assignedUser);
         mysqli_stmt_execute($query3) or die("Error. Could not select from the table." . mysqli_error($conn));
@@ -68,6 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         mysqli_stmt_execute($query4) or die("Error. Could not insert into the table." . mysqli_error($conn));
         mysqli_stmt_close($query4);
         mysqli_close($conn);
+        $subject = "New Task Assigned";
+        $body = "Task: $taskDescription <br> Due Date: $deadline <br> Service: $svcTask <br> From User: $email <br>";
+        if (mail($to, $subject, $body)) {
+          echo("<p>Confirmation email message successfully sent!</p>");
+        } else {
+          echo("<p>Confirmation email message delivery failed...</p>");
+        }
 	}
 } else {
 	exit;

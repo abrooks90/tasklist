@@ -93,7 +93,11 @@ if (!isset($_SESSION['authenticated'])) {
 							$servicesErr = "No services selected";
 							echo $servicesErr  . "<br>";
 							$confirmation = false;
-						}
+						} else {
+              $services = implode(",", $_POST['services']);
+
+              echo "Available Services: " . $services  . "<br>";
+            }
 
 						if(empty($_POST['days'])){
 							//read all provided values as an array and join them as comma separated string
@@ -135,7 +139,7 @@ if (!isset($_SESSION['authenticated'])) {
             "INSERT INTO service_suggestion (service_description, profileID) VALUES(?,?)")
               or die("Error: ". mysqli_error($conn));
               // bind parameters "s" - string
-            mysqli_stmt_bind_param ($query, "si",$svcSuggestion,$profile_id);
+            mysqli_stmt_bind_param ($query, "si",$svcSuggestion,$profileID);
 
             mysqli_stmt_execute($query)
               or die("Error. Could not insert into the table."

@@ -152,6 +152,7 @@
 
 									//when edit button is pressed, displays services as checkboxes similar to registration page
 									echo "<fieldset id='service' class='editable' hidden>";
+									echo "<legend>Select Available Days:</legend>";
 									while($row3 = mysqli_fetch_array($result3)){
 										echo "<label><input type='checkbox' class='service' value='{$row3['svcID']}' name='services[]'";
 										//checks if service is offered and checks box if it is

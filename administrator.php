@@ -81,10 +81,11 @@ $(function () {
 
 
   }
+  mysqli_stmt_close($query);
+  mysqli_close($conn);
 }
 
-    mysqli_stmt_close($query);
-    mysqli_close($conn);
+
 
    ?>
 <div id="placeholder"></div>
